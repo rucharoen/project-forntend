@@ -4,7 +4,7 @@ import Promotion from "../../../components/accommodation/Promotion";
 import Activity from "../../../components/activity/Activity";
 import HeroImage from "../../../components/heroImage/HeroImage";
 import SearchBox from "../../../components/search/SearchBox";
-import Accommodation from "../../../components/accommodation/Accommodation"
+import Accommodation from "../../../components/accommodation/Accommodation";
 import { Button } from "react-bootstrap";
 import "./HomeSearch.css";
 
@@ -27,41 +27,58 @@ const HomePage = () => {
       </section>
 
       {/* รายการที่พักยอดนิยม */}
-      <section className="Promotion">
-        <h3 className="fw-bold pt-1 text-center">
-          <span
-            className="border-bottom border-3 border-primary"
-            style={{ display: "inline-block" }}
-          >
-            โปรโมชันพิเศษ
-          </span>
-        </h3>
 
-        <Promotion />
+      <section className="Promotion">
+        <div className="container">
+          <h3 className="fw-bold pt-1 text-center">
+            <span
+              className="border-bottom border-3 border-primary-custom"
+              style={{ display: "inline-block" }}
+            >
+              โปรโมชัน
+            </span>
+          </h3>
+
+          <Promotion />
+
+          {/* เส้นแบ่งล่างสุด */}
+          <div
+      style={{
+        borderBottom: "3px solid rgba(186, 186, 186, 1)",
+        marginTop: "2rem"
+      }}
+    ></div>
+        </div>
       </section>
 
+    
       <section
         className="container mb-4"
         style={{ marginTop: isDesktop ? "2rem" : "2rem" }}
       >
-        <h3 className="fw-bold">
-          <span className="border-bottom border-3 border-primary">
-            ที่พักยอดนิยม
+        <h3 className="fw-bold pt-1 text-center">
+          <span
+            className="border-bottom border-3 border-primary-custom"
+            style={{ display: "inline-block" }}
+          >
+            ค้นหาประเภทห้องพัก
           </span>
-          
         </h3>
-      <Accommodation/>
+        <Accommodation />
       </section>
 
-      {/* โปรโมชัน */}
-
       {/* กิจกรรมแนะนำ */}
-      <section className="container my-5">
-        <h3 className="text-center fw-bold">
-          <span className="border-bottom border-3 border-primary">
-            เพลิดเพลินกับกิจกรรมชายหาดของเรา
-          </span>
+      <section className="container my-5 text-center">
+        <h3 className="fw-bold">
+          <span>สนุกกับกิจกรรมชายหาดของเรา</span>
         </h3>
+        <p
+          className="mx-auto"
+          style={{ maxWidth: "600px", color: "rgba(114, 114, 114, 1)" }}
+        >
+          แขกจะรู้สึกเหมือนอยู่บ้านเมื่อได้ใช้สิ่งอำนวยความสะดวกและกิจกรรมต่างๆ
+          ของรีสอร์ท
+        </p>
         <Activity />
       </section>
     </>

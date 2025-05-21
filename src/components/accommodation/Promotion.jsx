@@ -1,64 +1,52 @@
 import React, { useEffect, useState } from "react";
-import AccommodationService from "../../services/api/accommodation/accommodation.service";
-import AccommodationCard from "./AccommodationCard";
+import PromotionCard from "./PromotionCard";
 import { Spinner } from "react-bootstrap";
+import AccommodationService from "../../services/api/accommodation/accommodation.service";
 
 const Promotion = () => {
-    const [promotions, setPromotions] = useState([]);
-    const [loading, setLoading] = useState(true);
+  const [promotions, setPromotions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        fetchPromotions();
-    }, []);
+  useEffect(() => {
+    fetchPromotions();
+  }, []);
 
-    const fetchPromotions = async () => {
-        try {
-            setLoading(true);
-            const res = await AccommodationService.getPromotion();
-            console.log("API Response:", res?.data); // ตรวจสอบโครงสร้าง
+  const fetchPromotions = async () => {
+    try {
+      setLoading(true);
+      const res = await AccommodationService.getPromotion();
 
-            // ตรวจสอบว่า res.data เป็น array จริงหรือไม่
-            const promotionData = Array.isArray(res?.data)
-                ? res.data
-                : Array.isArray(res?.data?.promotions)
-                ? res.data.promotions
-                : [];
+      const promotionData = Array.isArray(res?.data)
+        ? res.data
+        : Array.isArray(res?.data?.promotions)
+        ? res.data.promotions
+        : [];
 
-            setPromotions(promotionData);
-        } catch (error) {
-            console.error("Error fetching promotions:", error);
-            setPromotions([]); // fallback
-        } finally {
-            setLoading(false);
-        }
-    };
+      setPromotions(promotionData);
+    } catch (error) {
+      setPromotions([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    return (
-        <div className="row">
-            {loading ? (
-                <div className="text-center my-5">
-                    <Spinner animation="border" variant="primary" />
-                </div>
-            ) : (
-                <>
-                    {promotions.length > 0 ? (
-                        promotions.map((promotion) => (
-                            <AccommodationCard
-                                key={promotion.id}
-                                accommodation={promotion}
-                            />
-                        ))
-                    ) : (
-                        <div className="text-center col-12">
-                            <p className="text-danger">
-                                ไม่สามารถโหลดข้อมูลโปรโมชั่นได้
-                            </p>
-                        </div>
-                    )}
-                </>
-            )}
+  return (
+    <div className="row" style={{ minHeight: "276px" }}>
+      {loading ? (
+        <div className="text-center my-5 w-100">
+          <Spinner animation="border" variant="primary" />
         </div>
-    );
+      ) : promotions.length > 0 ? (
+        promotions.slice(0, 3).map((promotion) => (
+          <PromotionCard key={promotion.id} accommodation={promotion} />
+        ))
+      ) : (
+        <div className="text-center w-100">
+          <p className="text-danger mb-0">ไม่สามารถโหลดข้อมูลโปรโมชั่นได้</p>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default Promotion;

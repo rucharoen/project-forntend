@@ -6,11 +6,27 @@
   padding: 20px;
   border-radius: 10px;
   width: 100%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   gap: 10px;
 
 }
+.container {
+  max-width: 1400px;
+}
 
 .Promotion {
-    margin-top: 200px;
+    margin-top: 110px;
+
+}
+
+/* เปลี่ยนสีเส้นขีดใต้แบบกำหนดเอง */
+.border-primary-custom {
+  border-bottom-color: rgba(0, 196, 255, 1) !important;
+}
+
+
+@media (max-width: 812px) {
+  .search-box{
+    top: 400px;
+  }
+  
 }

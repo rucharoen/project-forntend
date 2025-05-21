@@ -9,7 +9,6 @@ import TypeService from "../../services/api/accommodation/type.service";
 import "../../css/SearchBox.css";
 import { IconCalendarDown, IconCalendarUp, IconUser, IconDoor } from "@tabler/icons-react";
 import { createPortal } from "react-dom";
-import { IconChevronDown } from '@tabler/icons-react';
 
 registerLocale("th", th);
 
@@ -37,11 +36,33 @@ const SearchBox = ({ resetFilter }) => {
   const guestButtonRef = useRef(null);
   const today = new Date();
 
-  // โหลดค่าจาก URL params
+  // ✅ โหลดค่าจาก URL params
   useEffect(() => {
     const initType = searchParams.get("destination") || "";
+    const checkInParam = searchParams.get("checkIn");
+    const checkOutParam = searchParams.get("checkOut");
+    const guestsParam = parseInt(searchParams.get("guests")) || null;
+
     setDestination(initType);
     setSelectedType(initType);
+
+    if (checkInParam) {
+      const checkIn = dayjs(checkInParam, "YYYY-MM-DD").toDate();
+      setCheckInDate(checkIn);
+    }
+
+    if (checkOutParam) {
+      const checkOut = dayjs(checkOutParam, "YYYY-MM-DD").toDate();
+      setCheckOutDate(checkOut);
+    }
+
+    if (guestsParam) {
+      const baseRooms = 1;
+      const baseAdults = Math.max(1, guestsParam - baseRooms);
+      setRoomsCount(baseRooms);
+      setAdultsCount(baseAdults);
+      setChildrenCount(0); // ไม่มีแยก children ใน URL
+    }
   }, [searchParams]);
 
   // โหลดประเภทห้อง
@@ -125,9 +146,10 @@ const SearchBox = ({ resetFilter }) => {
       return;
     }
     setLoading(true);
+    const totalGuests = roomsCount + adultsCount + childrenCount;
     const params = new URLSearchParams({
       destination,
-      guests: roomsCount + adultsCount + childrenCount,
+      guests: totalGuests,
       checkIn: dayjs(checkInDate).format('YYYY-MM-DD'),
       checkOut: dayjs(checkOutDate).format('YYYY-MM-DD')
     });
@@ -140,50 +162,51 @@ const SearchBox = ({ resetFilter }) => {
     <div className={`searchbox-container${dateError ? ' error' : ''}`}>
       <form onSubmit={handleSearch}>
         {dateError && <div className="date-error">กรุณากรอกข้อมูลวันที่ต้องการเข้าพัก</div>}
-        
+
         <div className="searchbox-row">
           <div className="searchbox-col date">
             <div className="agoda-date-container">
               <button type="button" className="agoda-date-button" onClick={toggleCalendar} ref={dateButtonRef}>
-                <IconCalendarUp stroke={2} size={32}/><span className="calendar-text">{checkInDate ? dayjs(checkInDate).format('DD/MM/YYYY') : '  วันเช็คอิน'}</span>
+                <IconCalendarUp stroke={2} size={32} /><span className="calendar-text">{checkInDate ? dayjs(checkInDate).format('DD/MM/YYYY') : '  วันเช็คอิน'}</span>
               </button>
               <div>|</div>
               <button type="button" className="agoda-date-button" onClick={toggleCalendar}>
-                <IconCalendarDown stroke={2} size={32}/><span className="calendar-text">{checkOutDate ? dayjs(checkOutDate).format('DD/MM/YYYY') : 'วันเช็คเอาท์'}</span>
+                <IconCalendarDown stroke={2} size={32} /><span className="calendar-text">{checkOutDate ? dayjs(checkOutDate).format('DD/MM/YYYY') : 'วันเช็คเอาท์'}</span>
               </button>
             </div>
             {showCalendar && createPortal(
               <div className="calendar-popover" style={{ top: calendarPos.top, left: calendarPos.left }}>
                 <div className="calendar-wrapper">
-                  <div><label>เช็คอิน</label><DatePicker inline locale="th" selected={checkInDate} onChange={handleCheckInDate} minDate={today} dateFormat="dd/MM/yyyy"/></div>
-                  <div><label>เช็คเอาท์</label><DatePicker inline locale="th" selected={checkOutDate} onChange={handleCheckOutDate} minDate={checkInDate||today} dateFormat="dd/MM/yyyy"/></div>
+                  <div><label>เช็คอิน</label><DatePicker inline locale="th" selected={checkInDate} onChange={handleCheckInDate} minDate={today} dateFormat="dd/MM/yyyy" /></div>
+                  <div><label>เช็คเอาท์</label><DatePicker inline locale="th" selected={checkOutDate} onChange={handleCheckOutDate} minDate={checkInDate || today} dateFormat="dd/MM/yyyy" /></div>
                 </div>
               </div>, document.body)}
           </div>
 
           <div className="searchbox-col type">
             <div className="select-with-icon">
-              <IconDoor className="select-icon" stroke={2} size={32}/>
+              <IconDoor className="select-icon" stroke={2} size={32} />
               <select value={selectedType} onChange={handleTypeChange} className="select-input has-icon">
                 <option value="">ประเภทห้อง: ทั้งหมด</option>
-                {types.map((t,i)=><option key={i} value={t.name}>{t.name}</option>)}
+                {types.map((t, i) => <option key={i} value={t.name}>{t.name}</option>)}
               </select>
-              
             </div>
           </div>
-          <div className="searchbox-col guests" style={{position:'relative'}}>
+
+          <div className="searchbox-col guests" style={{ position: 'relative' }}>
             <div className="guest-selector" onClick={toggleGuestPopup} ref={guestButtonRef}>
-              <IconUser stroke={2} size={32}/><span>{`${roomsCount} ห้อง, ${adultsCount} ผู้ใหญ่${childrenCount>0?`, ${childrenCount} เด็ก`:``}`}</span>
+              <IconUser stroke={2} size={32} /><span>{`${roomsCount} ห้อง, ${adultsCount} ผู้ใหญ่${childrenCount > 0 ? `, ${childrenCount} เด็ก` : ``}`}</span>
             </div>
             {guestPopupVisible && createPortal(
               <div className="guest-popup" style={{ top: guestPopupPos.top, left: guestPopupPos.left }}>
-                {[{label:'ห้อง',key:'rooms',val:roomsCount},{label:'ผู้ใหญ่',key:'adults',val:adultsCount},{label:'เด็ก',key:'children',val:childrenCount}].map(({label,key,val})=>
-                  <div key={key} className="guest-row"><span>{label}</span><div className="counter"><button onClick={e=>{e.stopPropagation();changeCount(key,-1)}}>-</button><span>{val}</span><button onClick={e=>{e.stopPropagation();changeCount(key,1)}}>+</button></div></div>
+                {[{ label: 'ห้อง', key: 'rooms', val: roomsCount }, { label: 'ผู้ใหญ่', key: 'adults', val: adultsCount }, { label: 'เด็ก', key: 'children', val: childrenCount }].map(({ label, key, val }) =>
+                  <div key={key} className="guest-row"><span>{label}</span><div className="counter"><button onClick={e => { e.stopPropagation(); changeCount(key, -1) }}>-</button><span>{val}</span><button onClick={e => { e.stopPropagation(); changeCount(key, 1) }}>+</button></div></div>
                 )}
               </div>, document.body)}
           </div>
+
           <div className="searchbox-col button">
-            <button className="search-button" type="submit" disabled={loading}>{loading?'กำลังค้นหา':'ค้นหา'}</button>
+            <button className="search-button" type="submit" disabled={loading}>{loading ? 'กำลังค้นหา' : 'ค้นหา'}</button>
           </div>
         </div>
       </form>

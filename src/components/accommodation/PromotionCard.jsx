@@ -13,22 +13,25 @@ const PromotionCard = ({ accommodation }) => {
     ? Math.round(originalPrice * (1 - discountPercent / 100))
     : originalPrice;
 
-    
-
   return (
-    <Col xs={12} sm={6} md={4} lg={3} className="mb-4 d-flex justify-content-center">
+    <Col
+      xs={12}
+      sm={6}
+      md={4}
+      className="mb-3 mt-3 g-0"  // ลด margin top/bottom และเอา gutter ออก
+    >
       <div
-        className="card h-100 border-0"
+        className="card h-100 border-0 d-flex flex-column position-relative mx-auto"
         style={{
           boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
           borderRadius: "0.5rem",
-          width: "100%",
-          maxWidth: "410px",
+          width: "410px",  // ให้เต็ม col
+          height: "521px",
         }}
       >
-        {/* Badge */}
+        {/* ป้ายโปรโมชั่น */}
         <div
-          className="position-absolute bg-danger text-white px-2 py-1"
+          className="position-absolute bg-danger text-white px-3 py-1"
           style={{
             borderTopLeftRadius: "0.4rem",
             fontSize: "0.9rem",
@@ -38,25 +41,33 @@ const PromotionCard = ({ accommodation }) => {
           โปรโมชั่น
         </div>
 
-        {/* Image */}
+        {/* รูปภาพ */}
         <img
           src={fullImageUrl}
           alt={accommodation.name}
-          className="card-img-top"
+          className="card-img-top rounded-top"
           style={{
-            height: "200px",
+            height: "276px",
             objectFit: "cover",
             borderTopLeftRadius: "0.5rem",
             borderTopRightRadius: "0.5rem",
           }}
         />
 
-        {/* Content */}
+        {/* เนื้อหา */}
         <div className="card-body d-flex flex-column">
-          <h6 className="card-title fw-bold mb-2" style={{ fontSize: "1.25rem" }}>
+          <h6 className="card-title fw-bold mb-2" style={{ fontSize: "2rem" }}>
             {accommodation.name}
           </h6>
-          <p className="text-warning mb-1" style={{ fontSize: "1.05rem", fontWeight: "500" }}>
+
+          <p
+            className="text-warning mb-1"
+            style={{
+              fontSize: "1.5rem",
+              fontWeight: "500",
+              color: "rgba(255, 110, 0, 1)",
+            }}
+          >
             {accommodation.promotion_detail || "โปรโมชั่นพิเศษ"}
           </p>
           <p className="text-muted mb-1" style={{ fontSize: "0.95rem" }}>
@@ -67,9 +78,9 @@ const PromotionCard = ({ accommodation }) => {
           </p>
         </div>
 
-        {/* Footer */}
-        <div className="d-flex">
-          <div
+        {/* ปุ่มด้านล่างเต็มความกว้าง */}
+        <div className="d-flex w-100">
+          <span
             className="fw-bold text-center"
             style={{
               backgroundColor: "white",
@@ -82,11 +93,12 @@ const PromotionCard = ({ accommodation }) => {
               whiteSpace: "nowrap",
             }}
           >
-            {hasDiscount ? `ประหยัด ${discountPercent}%` : "ราคาปกติ"}
-          </div>
-          <Button
-            variant="primary"
-            className="fw-bold"
+            ประหยัด {discountPercent}%
+          </span>
+
+          <a
+            href="http://localhost:1111/search-results?destination=&guests=1&checkIn=2025-05-17&checkOut=2025-05-18"
+            className="fw-bold text-white text-decoration-none"
             style={{
               backgroundColor: "rgba(0, 196, 255, 1)",
               borderColor: "rgba(0, 196, 255, 1)",
@@ -94,10 +106,13 @@ const PromotionCard = ({ accommodation }) => {
               borderRadius: "0 0 0.375rem 0",
               fontSize: "1.05rem",
               whiteSpace: "nowrap",
+              display: "inline-block",
+              textAlign: "center",
+              padding: "0.5rem 1rem",
             }}
           >
             จองเลยตอนนี้
-          </Button>
+          </a>
         </div>
       </div>
     </Col>

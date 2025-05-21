@@ -308,15 +308,38 @@ min-height: 65px;
 
 
 /* Responsive (หน้าจอเล็กให้เลื่อนได้แนวนอน ไม่ตกบรรทัด) */
-@media (max-width: 768px) {
+@media (max-width: 812px) {
   .searchbox-row {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding-bottom: 0.5rem;
+    flex-direction: column; /* เปลี่ยนจากแถวเป็นคอลัมน์ */
+    gap: 1rem;
   }
 
   .searchbox-col {
-    flex: 0 0 auto;
-    min-width: 150px;
+    flex: 0 0 100%;     /* ให้ความกว้างเต็ม */
+    width: 100%;
+    min-width: unset;   /* ยกเลิก min-width เดิม */
+    align-items: stretch;
+  }
+
+  .agoda-date-container,
+  .guest-selector,
+  .select-input,
+  .search-button {
+    width: 100%;
+  }
+
+  .searchbox-col.button {
+    padding-top: 0;
+    height: auto;
+  }
+
+  .calendar-popover {
+    left: 50% !important;
+    transform: translateX(-50%);
+  }
+
+  .guest-popup {
+    left: 50% !important;
+    transform: translateX(-50%);
   }
 }

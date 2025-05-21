@@ -8,7 +8,7 @@ const getPopularAccommodation = () => {
 };
 
 const getPromotion = () => {
-    return axios.get(`${BASE_URL}/api/accommodation/promotion`);
+    return axios.get(`${BASE_URL}/api/pomotion`);
 };
 
 const getAll = async () => {
