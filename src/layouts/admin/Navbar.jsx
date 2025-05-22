@@ -55,7 +55,7 @@ const AdminNavbar = ({ isUser, logOut }) => {
                         ) : (
                             <div className="d-flex gap-2">
                                 <Button variant="outline-light" as={Link} to="/login">เข้าสู่ระบบ</Button>
-                                {/* <Button variant="light" as={Link} to="/register">สมัครสมาชิก</Button> */}
+                                <Button variant="light" as={Link} to="/register">สมัครสมาชิก</Button>
                             </div>
                         )}
                     </Nav>

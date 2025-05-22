@@ -42,7 +42,7 @@ const Promotion = () => {
         ))
       ) : (
         <div className="text-center w-100">
-          <p className="text-danger mb-0">ไม่สามารถโหลดข้อมูลโปรโมชั่นได้</p>
+          <p className="text-danger mb-0">ไม่สามารถโหลดข้อมูลได้</p>
         </div>
       )}
     </div>
