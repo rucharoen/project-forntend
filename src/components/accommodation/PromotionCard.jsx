@@ -1,121 +1,68 @@
 import Button from "react-bootstrap/Button";
-import Col from "react-bootstrap/Col";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const PromotionCard = ({ accommodation }) => {
   const fullImageUrl = `${BASE_URL}/uploads/accommodations/${accommodation.image_name}`;
-  const originalPrice = accommodation.price_per_night;
-  const discountPercent = accommodation.discount;
-
-  const hasDiscount = originalPrice && discountPercent;
-  const discountedPrice = hasDiscount
-    ? Math.round(originalPrice * (1 - discountPercent / 100))
-    : originalPrice;
 
   return (
-    <Col
-      xs={12}
-      sm={6}
-      md={4}
-      className="mb-3 mt-3 g-0"  // ลด margin top/bottom และเอา gutter ออก
-    >
+    <div className="px-2 py-3">
       <div
-        className="card h-100 border-0 d-flex flex-column position-relative mx-auto"
-        style={{
-          boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
-          borderRadius: "0.5rem",
-          width: "410px",  // ให้เต็ม col
-          height: "521px",
-        }}
+        className="border rounded shadow-sm d-flex flex-column"
+        style={{ width: "411px", height: "431px", padding: "12px" }}
       >
-        {/* ป้ายโปรโมชั่น */}
-        <div
-          className="position-absolute bg-danger text-white px-3 py-1"
-          style={{
-            borderTopLeftRadius: "0.4rem",
-            fontSize: "0.9rem",
-            fontWeight: "500",
-          }}
-        >
-          โปรโมชั่น
-        </div>
-
-        {/* รูปภาพ */}
+        {/* รูปภาพที่พัก */}
         <img
           src={fullImageUrl}
           alt={accommodation.name}
-          className="card-img-top rounded-top"
           style={{
-            height: "276px",
+            width: "100%",
+            height: "328px",
             objectFit: "cover",
-            borderTopLeftRadius: "0.5rem",
-            borderTopRightRadius: "0.5rem",
+            borderRadius: "6px",
+            marginBottom: "12px",
           }}
         />
 
-        {/* เนื้อหา */}
-        <div className="card-body d-flex flex-column">
-          <h6 className="card-title fw-bold mb-2" style={{ fontSize: "2rem" }}>
-            {accommodation.name}
-          </h6>
+        {/* ชื่อ, ขนาดห้อง และปุ่มอ่านเพิ่มเติม */}
+        <div className="d-flex justify-content-between align-items-start flex-wrap">
+          <div>
+            <h5
+              className="mb-1"
+              style={{
+                fontSize: "27px",
+                fontWeight: "bold",
+              }}
+            >
+              {accommodation.name}
+            </h5>
+            <p
+              className="mb-0"
+              style={{
+                fontSize: "16px",
+              }}
+            >
+               ขนาดห้อง {accommodation.room_size} ตารางเมตร
+            </p>
+          </div>
 
-          <p
-            className="text-warning mb-1"
+          <Button
+            variant="light"
+            className="mt-1"
             style={{
-              fontSize: "1.5rem",
-              fontWeight: "500",
-              color: "rgba(255, 110, 0, 1)",
-            }}
-          >
-            {accommodation.promotion_detail || "โปรโมชั่นพิเศษ"}
-          </p>
-          <p className="text-muted mb-1" style={{ fontSize: "0.95rem" }}>
-            {accommodation.promotion_date || "1 เม.ย. - 31 ส.ค. 2568"}
-          </p>
-          <p className="text-muted mb-2" style={{ fontSize: "0.95rem" }}>
-            รวมอาหารเช้า
-          </p>
-        </div>
-
-        {/* ปุ่มด้านล่างเต็มความกว้าง */}
-        <div className="d-flex w-100">
-          <span
-            className="fw-bold text-center"
-            style={{
-              backgroundColor: "white",
-              color: "rgba(91, 155, 43, 1)",
-              border: "1px solid rgba(91, 155, 43, 1)",
-              width: "50%",
-              padding: "0.375rem 0.75rem",
-              borderRadius: "0 0 0 0.375rem",
-              fontSize: "1rem",
+              border: "1px solid rgba(145, 145, 145, 1)",
+              color: "#000",
+              fontSize: "20px",
+              padding: "4px 12px",
+              height: "fit-content",
               whiteSpace: "nowrap",
             }}
           >
-            ประหยัด {discountPercent}%
-          </span>
-
-          <a
-            href="http://localhost:1111/search-results?destination=&guests=1&checkIn=2025-05-17&checkOut=2025-05-18"
-            className="fw-bold text-white text-decoration-none"
-            style={{
-              backgroundColor: "rgba(0, 196, 255, 1)",
-              borderColor: "rgba(0, 196, 255, 1)",
-              width: "50%",
-              borderRadius: "0 0 0.375rem 0",
-              fontSize: "1.05rem",
-              whiteSpace: "nowrap",
-              display: "inline-block",
-              textAlign: "center",
-              padding: "0.5rem 1rem",
-            }}
-          >
-            จองเลยตอนนี้
-          </a>
+            อ่านเพิ่มเติม
+          </Button>
         </div>
       </div>
-    </Col>
+    </div>
   );
 };
 

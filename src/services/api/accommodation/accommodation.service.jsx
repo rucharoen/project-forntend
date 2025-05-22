@@ -8,7 +8,7 @@ const getPopularAccommodation = () => {
 };
 
 const getPromotion = () => {
-    return axios.get(`${BASE_URL}/api/pomotion`);
+    return axios.get(`${BASE_URL}/api/accommodation/promotion`);
 };
 
 const getAll = async () => {
@@ -28,7 +28,7 @@ const getSearch = async (destination, checkIn, checkOut, guests) => {
 }
 
 const getAvailability = (checkInDate, checkOutDate) => {
-  return axios.get(`${BASE_URL}/api/accommodation/availability`, {
+  return axios.get(`${BASE_URL}/api/accommodation/availableroom`, {
     params: {
       check_in: checkInDate,
       check_out: checkOutDate
