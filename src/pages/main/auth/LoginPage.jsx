@@ -32,10 +32,6 @@ const LoginPage = ({ closeLogin }) => {
     if (!password) {
       newErrors.password = "กรุณากรอกรหัสผ่าน";
     }
-    //  else if (.test(password)){
-    //   newErrors.password = "รหัสผ่านไม่ถูกต้อง"
-    // }
-
 
     setErrors(newErrors);
 

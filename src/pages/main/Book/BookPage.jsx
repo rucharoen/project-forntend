@@ -97,6 +97,7 @@ function BookPage({ isUser }) {
   const [selectedPayment, setSelectedPayment] = useState("promptpay");
   const [showModal, setShowModal] = useState(false);
   const [agree, setAgree] = useState(false);
+  const [step, setStep] = useState(1); // เพิ่ม step state
 
   const checkInDate =
     searchParams.get("checkIn") || dayjs().add(1, "day").format("YYYY-MM-DD");
@@ -117,177 +118,204 @@ function BookPage({ isUser }) {
 
   return (
     <Container className="my-4 bg-light">
+      {/* Step Indicator */}
       <div className="text-center mb-3">
-        ขั้นตอน: <strong>1</strong> 2
+        ขั้นตอน: <strong>{step}</strong> / 2
       </div>
-      <div className="row g-4">
-        {/* Left Section */}
-        <div className="col-md-6">
-          <div className="card p-3">
-            <img
-              src=""
-              className="img-fluid mb-3"
-              alt="รูปห้อง"
-            />
-            <h5 className="fw-bold">เลือกวิธีการชำระเงิน</h5>
 
-            <div className="d-flex flex-column gap-2">
-              {[
-                {
-                  value: "promptpay",
-                  label: "พร้อมเพย์",
-                  icon: upimg4,
-                  size: [58, 33],
-                },
-                {
-                  value: "credit",
-                  label: "บัตรเครดิต",
-                  icon: upimg2,
-                  size: [45, 45],
-                },
-              ].map(({ value, label, icon, size }) => (
-                <label
-                  key={value}
-                  className={`payment-option ${
-                    selectedPayment === value ? "active" : ""
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="payment"
-                    checked={selectedPayment === value}
-                    onChange={() => setSelectedPayment(value)}
-                  />
-                  <img
-                    src={icon}
-                    alt={label}
-                    width={size[0]}
-                    height={size[1]}
-                  />
-                  <span>{label}</span>
-                </label>
-              ))}
-            </div>
+      {step === 1 && (
+        <div className="row g-4">
+          <div className="col-md-6">
+            <div className="card p-3">
+              <h5 className="fw-bold mb-3">เลือกวิธีการชำระเงิน</h5>
 
-            <div className="mt-3">
-              <label className="form-label fw-bold">คำขอพิเศษ</label>
-              <textarea
-                className="form-control"
-                rows="3"
-                placeholder="เช่น ประเภทเตียง หรือ สถานที่รับส่ง"
-              />
-              <div className="form-text text-danger">
-                * ไม่รับประกันคำขอพิเศษ
-                แต่คำขอของท่านจะได้รับการดูแลอย่างดีที่สุดตามที่เป็นไปได้
+              <div className="d-flex flex-column gap-2">
+                {[
+                  {
+                    value: "promptpay",
+                    label: "พร้อมเพย์",
+                    icon: upimg4,
+                    size: [58, 33],
+                  },
+                  {
+                    value: "credit",
+                    label: "บัตรเครดิต",
+                    icon: upimg2,
+                    size: [45, 45],
+                  },
+                ].map(({ value, label, icon, size }) => (
+                  <label
+                    key={value}
+                    className={`payment-option ${
+                      selectedPayment === value ? "active" : ""
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="payment"
+                      checked={selectedPayment === value}
+                      onChange={() => setSelectedPayment(value)}
+                    />
+                    <img src={icon} alt={label} width={size[0]} height={size[1]} />
+                    <span>{label}</span>
+                  </label>
+                ))}
               </div>
-            </div>
-          </div>
-        </div>
 
-        {/* Right Section */}
-        <div className="col-md-6">
-          <div className="card p-3">
-            <h5 className="fw-bold">สรุปรายการจอง</h5>
-            <div className="d-flex align-items-center mb-2">
-              <img src={upimg3} height="30" className="me-2" alt="รีสอร์ท" />
-              <div>
-                <strong>บาราลี บีช รีสอร์ท แอนด์ สปา</strong>
-                <br />
-                จังหวัดตราด ประเทศไทย
-                <br />
-                <span className="text-warning">★★★★★</span>
-              </div>
-            </div>
-
-            
-
-            <div className="small mt-3">
-              <div>
-                เช็คอิน: <strong>{FormatToBE(checkInDate)}</strong>
-              </div>
-              <div>
-                เช็คเอาท์: <strong>{FormatToBE(checkOutDate)}</strong>
-              </div>
-              {/* <div>
-                จำนวนผู้เข้าพัก: <strong>{guests}</strong>
-              </div> */}
-
-              {isUser?.name && (
-                <div className="mt-2 text-dark">
-                  ผู้ใช้: <strong>{isUser.name}</strong>
+              <div className="mt-3">
+                <label className="form-label fw-bold">คำขอพิเศษ</label>
+                <textarea
+                  className="form-control"
+                  rows="3"
+                  placeholder="เช่น ประเภทเตียง หรือ สถานที่รับส่ง"
+                />
+                <div className="form-text text-danger">
+                  * ไม่รับประกันคำขอพิเศษ
+                  แต่คำขอของท่านจะได้รับการดูแลอย่างดีที่สุดตามที่เป็นไปได้
                 </div>
-              )}             
-              <br />
-              อีเมล: Thanongthoeyu@gmail.com
-              <br />
-              
-              ราคา: ซัมเมอร์ดีล ลด 58%
-              <br />
-              ผู้ใหญ่: <strong>2</strong>
-              <br />
-              <a
-                href="#"
-                className="text-danger"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setShowModal(true);
-                }}
-              >
-                ดูรายละเอียด / แก้ไข
-              </a>
+              </div>
+
+              <div className="d-flex justify-content-between mt-4">
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => navigate(-1)}
+                >
+                  ยกเลิก
+                </button>
+                <button
+                  className="btn"
+                  onClick={() => setStep(2)}
+                  style={{
+                    backgroundColor: "#5B9B2B",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                    fontWeight: 600,
+                    height: "41px",
+                    padding: "0 24px",
+                  }}
+                >
+                  ถัดไป
+                </button>
+              </div>
             </div>
+          </div>
 
-            {showModal && (
-              <BookingModal
-                onClose={() => setShowModal(false)}
-                bookingData={{
-                  checkIn: "13 มิ.ย. 2025",
-                  checkOut: "14 มิ.ย. 2025",
-                  adults: 2,
-                  children: 0,
-                  roomType: "บีชฟรอนต์ วิลล่า",
-                  price: "7,140",
-                }}
-              />
-            )}
+          <div className="col-md-6">
+            {/* สรุปรายการจองสั้นๆฝั่งขวา */}
+            <div className="card p-3">
+              <h5 className="fw-bold">สรุปรายการจอง</h5>
+              <div className="d-flex align-items-center mb-2">
+                <img src={upimg3} height="30" className="me-2" alt="รีสอร์ท" />
+                <div>
+                  <strong>บาราลี บีช รีสอร์ท แอนด์ สปา</strong>
+                  <br />
+                  จังหวัดตราด ประเทศไทย
+                  <br />
+                  <span className="text-warning">★★★★★</span>
+                </div>
+              </div>
 
-            <div className="form-check mt-3 mb-3">
-              <input
-                type="checkbox"
-                id="agree"
-                className="form-check-input"
-                checked={agree}
-                onChange={(e) => setAgree(e.target.checked)}
-              />
-              <label className="form-check-label" htmlFor="agree">
-                ฉันได้อ่านและยอมรับ <a href="#">ข้อตกลงและเงื่อนไข</a>
-              </label>
-            </div>
+              <div className="small mt-3">
+                <div>
+                  เช็คอิน: <strong>{FormatToBE(checkInDate)}</strong>
+                </div>
+                <div>
+                  เช็คเอาท์: <strong>{FormatToBE(checkOutDate)}</strong>
+                </div>
 
-            <div className="d-flex justify-content-between">
-              <button className="btn btn-light">ยกเลิก</button>
-              <button
-                className="btn"
-                disabled={!agree}
-                onClick={handleBookingClick}
-                style={{
-                  backgroundColor: "#5B9B2B",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "4px",
-                  fontWeight: 600,
-                  height: "41px",
-                  padding: "0 24px",
-                  cursor: agree ? "pointer" : "not-allowed",
-                  opacity: agree ? 1 : 0.6,
-                }}
-              >
-                ทำการจอง →
-              </button>
+                {isUser?.name && (
+                  <div className="mt-2 text-dark">
+                    ผู้ใช้: <strong>{isUser.name}</strong>
+                  </div>
+                )}
+                <br />
+                อีเมล: Thanongthoeyu@gmail.com
+                <br />
+
+                ราคา: ซัมเมอร์ดีล ลด 58%
+                <br />
+                ผู้ใหญ่: <strong>2</strong>
+                <br />
+                <a
+                  href="#"
+                  className="text-danger"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowModal(true);
+                  }}
+                >
+                  ดูรายละเอียด / แก้ไข
+                </a>
+              </div>
+
+              {showModal && (
+                <BookingModal
+                  onClose={() => setShowModal(false)}
+                  bookingData={{
+                    checkIn: "13 มิ.ย. 2025",
+                    checkOut: "14 มิ.ย. 2025",
+                    adults: 2,
+                    children: 0,
+                    roomType: "บีชฟรอนต์ วิลล่า",
+                    price: "7,140",
+                  }}
+                />
+              )}
             </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {step === 2 && (
+        <div className="card p-3">
+          <h5 className="fw-bold mb-3">ยืนยันการจองและชำระเงิน</h5>
+
+          <div className="mb-3">
+            <strong>วิธีชำระเงินที่เลือก:</strong>{" "}
+            {selectedPayment === "promptpay" ? "พร้อมเพย์ (QR Code)" : "บัตรเครดิต"}
+          </div>
+
+          <div className="form-check mt-3 mb-3">
+            <input
+              type="checkbox"
+              id="agree"
+              className="form-check-input"
+              checked={agree}
+              onChange={() => setAgree(!agree)}
+            />
+            <label className="form-check-label" htmlFor="agree">
+              ฉันยอมรับข้อตกลงและเงื่อนไขการจอง
+            </label>
+          </div>
+
+          <div className="d-flex justify-content-between">
+            <button
+              className="btn btn-secondary"
+              onClick={() => setStep(1)}
+            >
+              ย้อนกลับ
+            </button>
+
+            <button
+              className="btn"
+              onClick={handleBookingClick}
+              disabled={!agree}
+              style={{
+                backgroundColor: "#5B9B2B",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                fontWeight: 600,
+                height: "41px",
+                padding: "0 24px",
+              }}
+            >
+              {selectedPayment === "promptpay" ? "จองและไปยัง QR Code" : "จองและชำระด้วยบัตรเครดิต"}
+            </button>
+          </div>
+        </div>
+      )}
     </Container>
   );
 }

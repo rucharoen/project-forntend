@@ -12,7 +12,7 @@ import AccommodationService from "../../../services/api/accommodation/accommodat
 import TypeService from "../../../services/api/accommodation/type.service";
 import GetRoomAvailability from "../../../components/common/GetRoomAvailability";
 import "../../../css/SearchPage.css";
-import tailwindcss from '@tailwindcss/vite'
+
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
