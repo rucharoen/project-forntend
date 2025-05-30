@@ -15,7 +15,7 @@ function BookingModal({ onClose, bookingData }) {
 
         <div className="d-flex justify-content-between mb-3">
           <div>
-            ราคา: {price} บาท (1 คืน)
+            ราคา: {price} บาท ( คืน)
             <br />
             วันที่เช็คอิน: {checkIn}
             <br />
